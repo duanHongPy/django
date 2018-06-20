@@ -4,21 +4,27 @@
 		<div class="header">
 			<div class="welcome fl">欢迎来到天天生鲜!</div>
 			<div class="fr">
+				{% if request.session.username|default:'' != ''%}
 				<div class="login_info fl">
-					欢迎您：<em>张 山</em>
+					欢迎您：<em>{{ request.session.username }}</em>
+                    <span>|</span>
+                    <a href="/fresh/loginout">退出</a>
 				</div>
+                {% else %}
 				<div class="login_btn fl">
-					<a href="login.html">登录</a>
+					<a href="/fresh/login">登录</a>
 					<span>|</span>
-					<a href="register.html">注册</a>
+					<a href="/fresh/register">注册</a>
 				</div>
+                {% endif %}
 				<div class="user_link fl">
 					<span>|</span>
-					<a href="user_center_info.html">用户中心</a>
+					<a href="/fresh/info">用户中心</a>
 					<span>|</span>
 					<a href="cart.html">我的购物车</a>
 					<span>|</span>
 					<a href="user_center_order.html">我的订单</a>
+				</div>
 				</div>
 			</div>
 		</div>

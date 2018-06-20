@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from .models import *
+# from django.http import response
 # Create your views here.
 def index(request):
     typelist = TypeGoods.objects.all()
@@ -42,5 +43,23 @@ def detail(request,goods_id):
     goods.save()
     new = goods.gtype.goodinfo_set.order_by('-id')[0:2]
 
+    #最近浏览功能
+    #nowgoods为字符串  nowgoods1为列表
+    nowgoods = request.COOKIES.get('nowgoods','')
+    goods_id = str(goods.id)
     context = {'title':goods.gname,'goods':goods,'new':new}
-    return render(request,'f_goods/detail.html',context)
+    response = render(request,'f_goods/detail.html',context)
+    if nowgoods != '':
+        nowgoods1 = nowgoods.split(',')
+        if nowgoods1.count(goods_id) == 1:
+            nowgoods1.remove(goods_id)
+        nowgoods1.insert(0,goods_id)
+        if len(nowgoods1) == 6:
+            del nowgoods1[5]
+        #表示以逗号作为分割连接列表中的每个元素组成字符串
+        nowgoods = ','.join(nowgoods1)
+    else:
+        nowgoods = goods_id
+    response.set_cookie('nowgoods',nowgoods)
+
+    return response

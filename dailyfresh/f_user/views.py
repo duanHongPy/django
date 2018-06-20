@@ -5,6 +5,8 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from hashlib import sha1
 from .models import *
+from . import user_decorator
+from f_goods.models import GoodInfo
 # Create your views here.
 def register(request):
     context = {'title':'用户注册'}
@@ -66,7 +68,8 @@ def login_handle(request):
         s.update(upwd)
         upwd2 = s.hexdigest()
         if upwd2 == user[0].upwd:
-            re = HttpResponseRedirect('/fresh/info')
+            url = request.COOKIES.get('url','/fresh/')
+            re = HttpResponseRedirect(url)
             #post接收到的均为字符串
             if jizhu != 0:
                 re.set_cookie('uname',uname)
@@ -84,15 +87,37 @@ def login_handle(request):
         return render(request, 'f_user/login.html', context)
 
 #个人信息页面
+
+@user_decorator.loginyanzheng
 def info(request):
     uemail = UserInfo.objects.get(id=request.session['user_id']).uemail
     uphone = UserInfo.objects.get(id=request.session['user_id']).uphone
     uadress = UserInfo.objects.get(id=request.session['user_id']).uaddressee
-    context = {'action':1,'title':'个人中心','uname':request.session['username'],'uemail':uemail,'uphone':uphone,'uadress':uadress}
+
+    #最近浏览
+    nowgoods = request.COOKIES.get('nowgoods','')
+    goodlist = []
+    if nowgoods != '':
+        nowgoodslist = nowgoods.split(',')
+
+        for g in nowgoodslist:
+            goodlist.append(GoodInfo.objects.get(id=int(g)))
+
+    context = {'action':1,'title':'个人中心','uname':request.session['username'],'uemail':uemail,'uphone':uphone,'uadress':uadress,
+               'goodslist':goodlist}
     return render(request,'f_user/user_center_info.html',context)
+
+def loginout(request):
+    #清除会话 删除当前的会话数据并删除会话的Cookie
+    request.session.flush()
+    return HttpResponseRedirect('/fresh/')
+
+@user_decorator.loginyanzheng
 def order(request):
     context = {'action':2,'title':'个人中心'}
     return render(request,'f_user/user_center_order.html',context)
+
+@user_decorator.loginyanzheng
 def site(request):
     user = UserInfo.objects.get(id=request.session['user_id'])
     if request.method == 'POST':

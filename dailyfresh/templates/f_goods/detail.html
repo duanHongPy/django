@@ -9,6 +9,9 @@
     }
     function minus() {
         num = parseFloat($('.num_show').val());
+        if(num<=1){
+            return;
+        }
         $('.num_show').val(num-1);
         $('.num_show').blur();
 
@@ -16,6 +19,9 @@
     $(function () {
         $('.num_show').blur(function () {
             num = parseFloat($('.num_show').val());
+            if(num <1){
+                num = 1;
+            }
             price = parseFloat($('#gprice').text());
             total = num*price;
             $('#gtotal').text(total.toFixed(2)+'元');

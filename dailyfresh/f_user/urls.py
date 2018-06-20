@@ -1,5 +1,5 @@
 from django.conf.urls import url
-import views
+from f_user import views
 
 urlpatterns = [
     url(r'^register$',views.register),
@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^info$',views.info),
     url(r'^order$',views.order),
     url(r'^site$',views.site),
+    url(r'^loginout$',views.loginout)
 ]
