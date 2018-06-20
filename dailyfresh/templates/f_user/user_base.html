@@ -1,6 +1,6 @@
 {% extends 'base_bottom.html' %}
 {% block body %}
-<body>
+
 	<div class="header_con">
 		<div class="header">
 			<div class="welcome fl">欢迎来到天天生鲜!</div>
@@ -38,9 +38,19 @@
 		<div class="left_menu_con clearfix">
 			<h3>用户中心</h3>
 			<ul>
+                {% if action == 1 %}
 				<li><a href="/fresh/info" class="active">· 个人信息</a></li>
 				<li><a href="/fresh/order">· 全部订单</a></li>
 				<li><a href="/fresh/site">· 收货地址</a></li>
+                {% elif action == 2 %}
+                    <li><a href="/fresh/info" >· 个人信息</a></li>
+				<li><a href="/fresh/order" class="active">· 全部订单</a></li>
+				<li><a href="/fresh/site">· 收货地址</a></li>
+                {% else %}
+                    <li><a href="/fresh/info" >· 个人信息</a></li>
+				<li><a href="/fresh/order">· 全部订单</a></li>
+				<li><a href="/fresh/site" class="active">· 收货地址</a></li>
+                {% endif %}
 			</ul>
 		</div>
         {% block info %}
@@ -48,7 +58,7 @@
         {% endblock info %}
 
 	</div>
-</body>
+
 
 
 {% endblock body %}

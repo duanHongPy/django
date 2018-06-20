@@ -88,10 +88,10 @@ def info(request):
     uemail = UserInfo.objects.get(id=request.session['user_id']).uemail
     uphone = UserInfo.objects.get(id=request.session['user_id']).uphone
     uadress = UserInfo.objects.get(id=request.session['user_id']).uaddressee
-    context = {'title':'个人中心','uname':request.session['username'],'uemail':uemail,'uphone':uphone,'uadress':uadress}
+    context = {'action':1,'title':'个人中心','uname':request.session['username'],'uemail':uemail,'uphone':uphone,'uadress':uadress}
     return render(request,'f_user/user_center_info.html',context)
 def order(request):
-    context = {'title':'个人中心'}
+    context = {'action':2,'title':'个人中心'}
     return render(request,'f_user/user_center_order.html',context)
 def site(request):
     user = UserInfo.objects.get(id=request.session['user_id'])
@@ -101,7 +101,7 @@ def site(request):
         user.uphone = request.POST.get('uphone')
         user.upost = request.POST.get('upost')
         user.save()
-    context = {'title':'个人中心','user':user}
+    context = {'action':3,'title':'个人中心','user':user}
     return render(request,'f_user/user_center_site.html',context)
 
 
