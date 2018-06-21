@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'f_user',
     'f_goods',
     'tinymce',
+    'f_cart',
 ]
 
 MIDDLEWARE = [
